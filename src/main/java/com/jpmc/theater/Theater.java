@@ -12,7 +12,6 @@ import com.fasterxml.jackson.datatype.jsr310.JSR310Module;
 
 @SuppressWarnings("deprecation")
 public class Theater {
-
     LocalDateProvider provider;
     private List<Showing> schedule;
     private static ObjectMapper objectMapper = new ObjectMapper();
@@ -53,21 +52,22 @@ public class Theater {
         return new Reservation(customer, showing, howManyTickets);
     }
 
-    public void printSchedule() throws JsonProcessingException {
-
-        System.out.println(provider.currentDate());
-        System.out.println("===================================================");
-        schedule.forEach(s -> System.out
-                .println(s.getSequenceOfTheDay() + ": " + s.getStartTime() + " " + s.getMovie().getTitle() + " "
-                        + s.getMovie().getRunningTime() + " $" + s.getMovieFee()));
-        System.out.println("===================================================");
+    public void printSchedule() {
+        try {
+            System.out.println("===================================================");
+            schedule.forEach(s -> System.out.println(s.getSequenceOfTheDay() + ": " + s.getStartTime() + " "
+                    + s.getMovie().getTitle() + " " + s.getMovie().getRunningTime() + " $" + s.getMovieFee()));
+            System.out.println("===================================================");
 
         // Display Schedule in JSON
         System.out.println(objectMapper.writeValueAsString(schedule));
+    } catch (JsonProcessingException e) {
+        e.printStackTrace();
+    }
 
     }
 
-    public static void main(String[] args) throws JsonProcessingException {
+public static void main(String[] args) {
         Theater theater = new Theater(LocalDateProvider.singleton());
         theater.printSchedule();
     }
